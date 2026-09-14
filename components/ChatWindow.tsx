@@ -78,6 +78,36 @@ export default function ChatWindow({
       message_type: 'image',
       attachment_url: signed?.signedUrl ?? null,
       attachment_name: file.name,
+      attachment_size: file.size,
+    });
+
+    setSending(false);
+  }
+
+  async function sendFile(file: File) {
+    setSending(true);
+    const path = `${conversationId}/${Date.now()}-${file.name}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('chat-files')
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+
+    if (uploadError) {
+      setSending(false);
+      return;
+    }
+
+    const { data: signed } = await supabase.storage
+      .from('chat-files')
+      .createSignedUrl(path, 60 * 60 * 24 * 7); // 7-day signed URL
+
+    await supabase.from('messages').insert({
+      conversation_id: conversationId,
+      sender_id: currentUserId,
+      message_type: 'file',
+      attachment_url: signed?.signedUrl ?? null,
+      attachment_name: file.name,
+      attachment_size: file.size,
     });
 
     setSending(false);
@@ -101,7 +131,7 @@ export default function ChatWindow({
         <div ref={bottomRef} />
       </div>
 
-      <Composer onSendText={sendText} onSendPhoto={sendPhoto} sending={sending} />
+      <Composer onSendText={sendText} onSendPhoto={sendPhoto} onSendFile={sendFile} sending={sending} />
     </div>
   );
 }

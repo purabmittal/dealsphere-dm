@@ -96,3 +96,22 @@ Your admin dashboard lives at: `https://your-site.vercel.app/admin`
 Included: signup/login, private 1-to-1 chat, photo sharing, link sharing with clickable links, admin dashboard with a user list and unread counts, real-time messages, read receipts, row-level security.
 
 Not included yet (mentioned as "optional" in the original spec): browser push notifications, and rich link preview cards (title/thumbnail scraping) — links currently show as clean clickable text, which is safe and simple. Ask if you'd like either of these added.
+
+## v2 upgrade — client profiles, files, admin inbox
+
+If you already have the v1 site live, this upgrade is **additive** — it doesn't touch your existing users or messages. Do these two steps once, then push the new code:
+
+1. In Supabase SQL Editor, run `supabase/migration-v2.sql`
+2. Then run `supabase/storage-migration-v2.sql`
+
+What v2 adds:
+- Clients can now set a name, profile photo (DP), and short bio at `/profile`
+- Clients can send PDF/DOC/DOCX files in chat, in addition to photos
+- Admin gets a proper "All Clients" directory with search (name/Instagram/email) and filters (label, unread only)
+- Admin can label each client's conversation (New Lead, Interested, Follow-up, Potential Partner, Client, Completed, Not Interested)
+- Admin can add private internal notes on a client (never shown to the client)
+- Admin can archive/restore conversations (a new "Archived" tab)
+- Admin gets a "Settings" tab listing current team members
+
+Not built in this pass (kept out to manage scope, per your spec's "future-ready" section): typing indicators, online/last-seen status, forgot-password flow, and CRM modules like deals/tasks/payments — the database and code structure are left open for these later.
+

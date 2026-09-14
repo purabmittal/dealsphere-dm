@@ -9,6 +9,12 @@ function isUrl(text: string) {
   }
 }
 
+function formatFileSize(bytes: number | null) {
+  if (!bytes) return '';
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export default function MessageBubble({
   message,
   isOwn,
@@ -31,12 +37,36 @@ export default function MessageBubble({
         }`}
       >
         {message.message_type === 'image' && message.attachment_url && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={message.attachment_url}
-            alt={message.attachment_name ?? 'Shared photo'}
-            className="mb-1 max-h-64 w-full rounded-lg object-cover"
-          />
+          <a href={message.attachment_url} target="_blank" rel="noopener noreferrer">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={message.attachment_url}
+              alt={message.attachment_name ?? 'Shared photo'}
+              style={{ maxWidth: 240, maxHeight: 320 }}
+              className="mb-1 w-full rounded-lg object-cover"
+            />
+          </a>
+        )}
+
+        {message.message_type === 'file' && message.attachment_url && (
+          <a
+            href={message.attachment_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`mb-1 flex items-center gap-2 rounded-lg p-2 ${
+              isOwn ? 'bg-white/10' : 'bg-white'
+            }`}
+          >
+            <span className="text-xl">📄</span>
+            <span className="flex-1 overflow-hidden">
+              <span className="block truncate text-sm font-medium">
+                {message.attachment_name ?? 'File'}
+              </span>
+              <span className={`text-xs ${isOwn ? 'text-white/60' : 'text-navy/50'}`}>
+                {formatFileSize(message.attachment_size)} · Tap to open
+              </span>
+            </span>
+          </a>
         )}
 
         {message.content && message.message_type === 'link' ? (
