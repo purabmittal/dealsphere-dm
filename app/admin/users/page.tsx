@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { AdminHeader } from '../page';
-
+import AdminHeader from '@/components/AdminHeader';
 export default async function AdminUsersPage() {
   const supabase = createClient();
 

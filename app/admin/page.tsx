@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import LogoutButton from '@/components/LogoutButton';
+import AdminHeader from '@/components/AdminHeader';
 
 export default async function AdminDashboard() {
   const supabase = createClient();
@@ -75,32 +75,5 @@ function StatCard({ label, value }: { label: string; value: number }) {
       <p className="text-2xl font-bold text-navy">{value}</p>
       <p className="mt-1 text-xs text-navy/50">{label}</p>
     </div>
-  );
-}
-
-export function AdminHeader({ active }: { active: 'dashboard' | 'users' }) {
-  return (
-    <header className="border-b border-gray-100 bg-white px-4 py-3">
-      <div className="mx-auto flex max-w-4xl items-center justify-between">
-        <div>
-          <h1 className="font-semibold text-navy">DealSphere Admin</h1>
-          <nav className="mt-1 flex gap-4 text-sm">
-            <Link
-              href="/admin"
-              className={active === 'dashboard' ? 'font-medium text-skyblue-dark' : 'text-navy/50'}
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/admin/users"
-              className={active === 'users' ? 'font-medium text-skyblue-dark' : 'text-navy/50'}
-            >
-              Users
-            </Link>
-          </nav>
-        </div>
-        <LogoutButton />
-      </div>
-    </header>
   );
 }
