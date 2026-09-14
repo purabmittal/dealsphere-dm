@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
-export default function ArchiveButton({ conversationId }: { conversationId: string }) {
+export default function ArchiveButton({
+  conversationId,
+  redirectTo = '/admin/clients',
+}: {
+  conversationId: string;
+  redirectTo?: string;
+}) {
   const supabase = createClient();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -16,7 +22,7 @@ export default function ArchiveButton({ conversationId }: { conversationId: stri
       .update({ status: 'archived', archived_at: new Date().toISOString() })
       .eq('id', conversationId);
     setLoading(false);
-    router.push('/admin/clients');
+    router.push(redirectTo);
   }
 
   return (

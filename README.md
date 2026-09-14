@@ -115,3 +115,19 @@ What v2 adds:
 
 Not built in this pass (kept out to manage scope, per your spec's "future-ready" section): typing indicators, online/last-seen status, forgot-password flow, and CRM modules like deals/tasks/payments — the database and code structure are left open for these later.
 
+## v3 upgrade — WhatsApp-style admin inbox
+
+This adds a new `/admin/inbox` page — a real-time conversation list + chat, side by side on desktop, list-then-full-screen-chat on mobile. Your existing Dashboard/All Clients/Archived pages are untouched; Inbox is simply a new, faster way to work day-to-day.
+
+**Database step (safe, additive):** run `supabase/migration-v3.sql` in Supabase's SQL Editor. It only adds a read-only view — nothing in your existing tables changes.
+
+What's new:
+- Conversation list sorted by most recent activity — moves a client to the top the moment they message, live, no refresh
+- Last-message preview shows 📷 Photo / 📎 filename / 🔗 Link / or the text itself
+- Unread badge per conversation, live-updating
+- Search by name/Instagram/email, plus All/Unread/Active/Archived tabs
+- "Mark unread" action in the chat header, alongside the existing label/notes/archive panel
+
+Not included in this pass: in-conversation message search, browser push notifications, and pagination for very large client lists (fine for the scale you're at now — worth revisiting if you ever have hundreds of active conversations at once).
+
+

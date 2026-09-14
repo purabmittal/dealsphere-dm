@@ -12,6 +12,9 @@ export default function AdminHeader({
         <div>
           <h1 className="font-semibold text-navy">DealSphere Admin</h1>
           <nav className="mt-1 flex gap-4 overflow-x-auto text-sm">
+            <Link href="/admin/inbox" className="whitespace-nowrap font-medium text-gold">
+              Inbox
+            </Link>
             <Link
               href="/admin"
               className={
